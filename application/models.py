@@ -3,12 +3,13 @@ from application import login_manager
 from flask_login import UserMixin
 from datetime import datetime
 
+
 class BlogPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False, unique=True)
     content = db.Column(db.Text, nullable=False, unique=True)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=False)
     def __repr__(self):
         return ''.join([
 			'User ID: ', str(self.id), '\r\n',
@@ -25,7 +26,7 @@ class Users(db.Model, UserMixin):
     last_name = db.Column(db.String(30), nullable=False)
     email = db.Column(db.String(150), nullable=False, unique=True)
     password = db.Column(db.String(500), nullable=False)
-    posts = db.relationship('Posts', backref='author', lazy=True)
+    posts = db.relationship('BlogPost', backref='author', lazy=True)
     books= db.relationship('Books', backref='book_ref', lazy=True)
     def __repr__(self):
         return ''.join([
@@ -38,7 +39,7 @@ class Books(db.Model, UserMixin):
     book_title = db.Column(db.String(30), nullable=False)
     book_author = db.Column(db.String(30), nullable=False)
     book_genre = db.Column(db.String(150), nullable=False, unique=True)
-    posts = db.relationship('Posts', backref='author', lazy=True)
+    posts = db.relationship('BlogPost', backref='author', lazy=True)
     books= db.relationship('Books', backref='book_ref', lazy=True)
     def __repr__(self):
         return ''.join([

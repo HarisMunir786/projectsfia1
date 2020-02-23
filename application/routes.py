@@ -1,5 +1,6 @@
 from flask import render_template, request, redirect
 from application import app
+from application.models import BlogPost, Users, Books
 
 @app.route('/')
 @app.route('/home')
@@ -35,17 +36,17 @@ def posts():
         new_post = BlogPost(title=post_title, content=post_content, author=post_author)
         db.session.add(new_post)
         db.session.commit()
-        return redirect('/posts')
+        return redirect('/login/myaccount/posts')
     else:
         all_posts = BlogPost.query.order_by(BlogPost.date_posted).all()
-        return render_template('posts.html', all_posts=BlogPost)
+        return render_template('/login/myaccount.html', all_posts=BlogPost)
 
 @app.route('/login/myaccount/posts/delete/<int:id>')
 def delete(id):
     post = BlogPost.query.get_or_404(id)
     db.session.delete(post)
     db.session.commit()
-    return redirect('/posts')
+    return redirect('/login/myaccount.html')
 
 @app.route('/login/myaccount/posts/edit/<int:id>', methods=['GET','POST'])
 def edit(id):
